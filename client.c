@@ -8,7 +8,7 @@
 #include <arpa/inet.h>
 #include "helpers.h"
 #include "requests.h"
-#include "parson/parson.h"
+#include "parson.h"
 
 #define HOST "63.32.125.183"
 #define PORT 8081

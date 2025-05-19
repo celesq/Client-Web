@@ -1,0 +1,65 @@
+322 CA Celescu Rares Andrei
+
+Pentru implementarea temei am folosit biblioteca parson
+(https://github.com/kgabis/parson) pentru implementarea lucrului cu obiectele
+de tip JSON in cererile de tip Content-Type: application/json. Folosind API-ul
+oferit de biblioteca parson, am construit si am parsat obiectele de tip JSON
+pentru a le trimite catre / primi de la server intr-un mod corect.
+
+Pentru conectarea la server si trimiterea / primirea mesajelor am folsoit
+biblioteca sys/socket.h si functiile de send/recieve din helpers.h (luate
+din laboratorul 9) , precum si functia de compute message care adauga \r\n la
+un mesaj pentru a respecta tipul cererilor.
+
+In fisierul requests.c, am implementat functiile care primesc datele necesare
+si compun o cerere de tip GET/POST/PUT/DELETE. Pe langa argumentele care sunt
+necesare oricarei cereri (HOST,url), am adaugat pentru cererile de tip POST/PUT
+si content_type, body_data si body_data_fields_count. De asemenea, pentru toate
+cerile am adaugat si vectorii de stringuri cookies si tokens, impreuna cu 
+cookies_count si token_count, variabile globale in client.c unde tin minte
+cookie-urile si tokenurile JWT primite pentru acces.
+
+In client, cand fac o cerere am 2 parametrii in plus care imi spun daca cererea
+trebuie sa contina cookie-uri si token JWT, iar in functie de acei parametrii
+apelez functia corespunzatoare compute_.._request cu parametrii necesari. Apoi,
+cu mesajul facut de functiile compute, trimit catre server si primesc raspunsul,
+inchizand conexiunea cu serverul, urmand ca raspunsul sa fie verificat in
+functia apelanta. Conexiunea cu serverul o inchid, deoarece la fiecare cerere
+o deschid din nou, iar dupa trimiterea acesteia se inchide. In laborator
+serverul nu suporta cereri cu parametrul keep-alive asa ca am facut la fel.
+
+In functia main, aloc memorie pentru vectorii de stringuri iar apoi, intr-o
+bucla infinita, citesc o linie si incerc sa vad ce fel de comanda este. In
+functie de aceasta, intru in functia corespunzatoare si citesc(daca este cazul)
+parametrii care se dau de la tastatura, apoi trimit cererea corespunzatoara
+serverului si verific raspunsul primit. Daca acesta contine un mesaj de tip 200
+inseamna ca cererea a returnat succes, asa ca printez mesajul de succes, in caz
+contrar printez mesajul de eroare.
+
+In unele functii, precum add_collection, trebuie facuti pasi suplimentari dupa
+trimiterea cererii. Astfel, in functia add_collection, dupa ce citesc 
+informatiile de la tastatura, imi initializez un obiect de tip JSON si ii pun
+titlul colectiei si numarul de filme, apoi trec prin vectorul de id-uri de
+filme si pun id-ul fiecarui film in obiectul JSON. Apoi se trimite cererea POST
+corespunzatoare, se verifica mesajul primit(daca este eroare se abandoneaza),
+iar in cazul de succes trebuie puse si filmele in colectie.
+Astfel, fac o cerere de tip GET pe url-ul "/api/v1/tema/library/collections"
+(adica get_collections) si primesc un obiect JSON cu toate colectiile. Apoi,
+il parsez in functia get_collection_id si caut colectia cu titlul colectiei
+adaugate de mine, pentru a-i gasi id-ul. Cu id-ul colectiei gasit, folosesc
+functia can_add_movie_to_collection pentru a adauga fiecare film in colectie
+(avand id-ul ambelor filme). Folosesc functia can_add_movie_to_collection si
+nu add_movie_to_collection, deoarece aceasta intoarce un int, iar in caz de
+eroare nu incerc sa pun toate filmele, ci ma opresc dupa primul esuat.
+
+In plus, mai am functii de genul parse_movies / parse_collections care primesc
+un string de tip obiect JSON si il parseaza, scotand campurile necesare si
+printand la tastatura cu outputul dorit.
+
+Cand se face logout / logout_admin, automat se apeleaza functia de eliberare
+a structurilor cookies si tokens, deoarece doar un utilizator poate fi logat
+la un moment de timp pe server, iar cand acesta se delogheaza, se elibereaza
+structurile si se realoca memoria, urmand ca la urmatorul login + cerere care
+returneaza token / cookie sa fie populate.
+Pentru popularea lor, se parseaza stringul response returnat cu un pointer care
+incepe de la pozitia dorita si se adauga caracter cu caracter.
