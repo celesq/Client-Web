@@ -190,8 +190,19 @@ void DELETE(char url[], int has_cookies, int has_token, char **response)
 	close_connection(sockfd);
 }
 
-void login_request(char admin_username[], char username[], char password[])
+void login_request()
 {
+
+	char admin_username[LINELEN], username[LINELEN], password[LINELEN];
+	printf("admin_username=");
+	fgets(admin_username, LINELEN, stdin);
+	admin_username[strlen(admin_username) - 1] = '\0';
+	printf("username=");
+	fgets(username, LINELEN, stdin);
+	username[strlen(username) - 1] = '\0';
+	printf("password=");
+	fgets(password, LINELEN, stdin);
+	password[strlen(password) - 1] = '\0';
 
 	JSON_Value *root_value = json_value_init_object();
 	JSON_Object *root_object = json_value_get_object(root_value);
@@ -230,8 +241,16 @@ void login_request(char admin_username[], char username[], char password[])
 	json_value_free(root_value);
 }
 
-void login_admin(char username[], char password[])
+void login_admin()
 {
+
+	char username[LINELEN], password[LINELEN];
+	printf("username=");
+	fgets(username, LINELEN, stdin);
+	username[strlen(username) - 1] = '\0';
+	printf("password=");
+	fgets(password, LINELEN, stdin);
+	password[strlen(password) - 1] = '\0';
 
 	JSON_Value *root_value = json_value_init_object();
 	JSON_Object *root_object = json_value_get_object(root_value);
@@ -269,8 +288,16 @@ void login_admin(char username[], char password[])
 	json_value_free(root_value);
 }
 
-void add_user(char username[], char password[])
+void add_user()
 {
+
+	char username[LINELEN], password[LINELEN];
+	printf("username=");
+	fgets(username, LINELEN, stdin);
+	username[strlen(username) - 1] = '\0';
+	printf("password=");
+	fgets(password, LINELEN, stdin);
+	password[strlen(password) - 1] = '\0';
 
 	JSON_Value *root_value = json_value_init_object();
 	JSON_Object *root_object = json_value_get_object(root_value);
@@ -331,10 +358,15 @@ void get_users()
 	}
 }
 
-void delete_user(char username[])
+void delete_user()
 {
 
-	char url[LINELEN];
+	char username[LINELEN];
+	printf("username=");
+	fgets(username, LINELEN, stdin);
+	username[strlen(username) - 1] = '\0';
+
+	char url[2 * LINELEN];
 	sprintf(url, "/api/v1/tema/admin/users/%s", username);
 
 	char *response = calloc(1, LINELEN);
@@ -426,8 +458,26 @@ void get_movies()
 	}
 }
 
-void add_movie(char title[], double year, char description[], double rating)
+void add_movie()
 {
+
+	char title[LINELEN], year_str[LINELEN], description[LINELEN], rating_str[LINELEN];
+	double year, rating;
+	printf("title=");
+	fgets(title, LINELEN, stdin);
+	title[strlen(title) - 1] = '\0';
+	printf("year=");
+	fgets(year_str, LINELEN, stdin);
+	year_str[strlen(year_str) - 1] = '\0';
+	printf("description=");
+	fgets(description, LINELEN, stdin);
+	description[strlen(description) - 1] = '\0';
+	printf("rating=");
+	fgets(rating_str, LINELEN, stdin);
+	rating_str[strlen(rating_str) - 1] = '\0';
+	char *p, *p1;
+	year = strtod(year_str, &p);
+	rating = strtod(rating_str, &p1);
 
 	JSON_Value *root_value = json_value_init_object();
 	JSON_Object *root_object = json_value_get_object(root_value);
@@ -455,8 +505,16 @@ void add_movie(char title[], double year, char description[], double rating)
 
 }
 
-void get_movie(double id)
+void get_movie()
 {
+
+	char id_str[LINELEN];
+	double id;
+	printf("id=");
+	fgets(id_str, LINELEN, stdin);
+	id_str[strlen(id_str) - 1] = '\0';
+	char *p;
+	id = strtod(id_str, &p);
 
 	char url[LINELEN];
 	sprintf(url, "/api/v1/tema/library/movies/%d", (int)id);
@@ -473,8 +531,31 @@ void get_movie(double id)
 
 }
 
-void update_movie(double id, char title[], double year, char description[], double rating)
+void update_movie()
 {
+
+	char id_str[LINELEN], title[LINELEN], year_str[LINELEN], description[LINELEN], rating_str[LINELEN];
+	double year, rating, id;
+	printf("id=");
+	fgets(id_str, LINELEN, stdin);
+	id_str[strlen(id_str) - 1] = '\0';
+	char *p2;
+	id = strtod(id_str, &p2);
+	printf("title=");
+	fgets(title, LINELEN, stdin);
+	title[strlen(title) - 1] = '\0';
+	printf("year=");
+	fgets(year_str, LINELEN, stdin);
+	year_str[strlen(year_str) - 1] = '\0';
+	printf("description=");
+	fgets(description, LINELEN, stdin);
+	description[strlen(description) - 1] = '\0';
+	printf("rating=");
+	fgets(rating_str, LINELEN, stdin);
+	rating_str[strlen(rating_str) - 1] = '\0';
+	char *p, *p1;
+	year = strtod(year_str, &p);
+	rating = strtod(rating_str, &p1);
 
 	char url[LINELEN];
 	sprintf(url, "/api/v1/tema/library/movies/%d", (int)id);
@@ -504,8 +585,16 @@ void update_movie(double id, char title[], double year, char description[], doub
 	json_value_free(root_value);
 }
 
-void delete_movie(double id)
+void delete_movie()
 {
+
+	char id_str[LINELEN];
+	double id;
+	printf("id=");
+	fgets(id_str, LINELEN, stdin);
+	id_str[strlen(id_str) - 1] = '\0';
+	char *p;
+	id = strtod(id_str, &p);
 
 	char url[LINELEN];
 	sprintf(url, "/api/v1/tema/library/movies/%d", (int)id);
@@ -546,13 +635,12 @@ int get_collection_id(const char *json_string, char title_collection[])
 	JSON_Array *collections = json_object_get_array(root_object, "collections");
 	size_t count = json_array_get_count(collections);
 
-	for (int i = 0; i < count; i++) {
+	for (size_t i = 0; i < count; i++) {
 
 		JSON_Object *collection = json_array_get_object(collections, i);
 
 		int id = json_object_get_number(collection, "id");
-		char *owner = json_object_get_string(collection, "owner");
-		char *title = json_object_get_string(collection, "title");
+		const char *title = json_object_get_string(collection, "title");
 		if (strcmp(title_collection, title) == 0) {
 			json_value_free(root_value);
 			return id;
@@ -560,9 +648,10 @@ int get_collection_id(const char *json_string, char title_collection[])
 	}
 
 	json_value_free(root_value);
+	return 0;
 }
 
-char *get_movie_name(const char *json_string, int id_movie)
+const char *get_movie_name(const char *json_string, int id_movie)
 {
 
 	JSON_Value *root_value = json_parse_string(json_string);
@@ -583,10 +672,22 @@ char *get_movie_name(const char *json_string, int id_movie)
 	}
 
 	json_value_free(root_value);
+	return NULL;
 }
 
-void add_movie_to_collection(int id_collection, int id_movie)
+void add_movie_to_collection()
 {
+
+	char id_m[LINELEN], id_c[LINELEN];
+	int id_movie, id_collection;
+	printf("collection_id=");
+	fgets(id_c, LINELEN, stdin);
+	id_c[strlen(id_c) - 1] = '\0';
+	printf("movie_id=");
+	fgets(id_m, LINELEN, stdin);
+	id_m[strlen(id_m) - 1] = '\0';
+	id_movie = atoi(id_m);
+	id_collection = atoi(id_c);
 
 	JSON_Value *root_value = json_value_init_object();
 	JSON_Object *root_object = json_value_get_object(root_value);
@@ -642,8 +743,25 @@ int can_add_movie_to_collection(int id_collection, int id_movie)
 
 }
 
-void add_collection(char title[], int movies[], int num_movies)
+void add_collection()
 {
+	char title[LINELEN], num_movies_str[LINELEN];
+	int movies[MAX_MOVIES], num_movies;
+	printf("title=");
+	fgets(title, LINELEN, stdin);
+	title[strlen(title) - 1] = '\0';
+	printf("num_movies=");
+	fgets(num_movies_str, LINELEN, stdin);
+	num_movies_str[strlen(num_movies_str) - 1] = '\0';
+	num_movies = atoi(num_movies_str);
+
+	for (int i = 0; i < num_movies; i++) {
+		printf("movie_id[%d]=", i);
+		char current[LINELEN];
+		fgets(current, LINELEN, stdin);
+		current[strlen(current) - 1] = '\0';
+		movies[i] = atoi(current);
+	}
 
 	JSON_Value *root_value = json_value_init_object();
 	JSON_Object *root_object = json_value_get_object(root_value);
@@ -697,13 +815,13 @@ void parse_collections(const char *json_string)
 	JSON_Array *collections = json_object_get_array(root_object, "collections");
 	size_t count = json_array_get_count(collections);
 
-	for (int i = 0; i < count; i++) {
+	for (size_t i = 0; i < count; i++) {
 
 		JSON_Object *collection = json_array_get_object(collections, i);
 
 		int id = json_object_get_number(collection, "id");
-		char *owner = json_object_get_string(collection, "owner");
-		char *title = json_object_get_string(collection, "title");
+		const char *owner = json_object_get_string(collection, "owner");
+		const char *title = json_object_get_string(collection, "title");
 
 		printf("#%d: %s: %s\n", id, owner, title);
 	}
@@ -740,12 +858,12 @@ void parse_collection(const char *json_string)
 	printf("title = %s\n", collection_title);
 	printf("owner = %s\n", collection_owner);
 
-	for (int i = 0; i < count; i++) {
+	for (size_t i = 0; i < count; i++) {
 
 		JSON_Object *movie = json_array_get_object(movies, i);
 
 		int id = json_object_get_number(movie, "id");
-		char *title = json_object_get_string(movie, "title");
+		const char *title = json_object_get_string(movie, "title");
 
 		printf("#%d: %s\n", id, title);
 	}
@@ -754,11 +872,16 @@ void parse_collection(const char *json_string)
 }
 
 
-void get_collection(int id)
+void get_collection()
 {
 
+	char id[LINELEN];
+	int id_collection;
+	printf("id=");
+	fgets(id, LINELEN, stdin);
+	id_collection = atoi(id);
 	char url[LINELEN];
-	sprintf(url, "/api/v1/tema/library/collections/%d", id);
+	sprintf(url, "/api/v1/tema/library/collections/%d", id_collection);
 
 	char *response = calloc(1, LINELEN);
 	GET(url, 0, 1, &response);
@@ -772,8 +895,14 @@ void get_collection(int id)
 
 }
 
-void delete_collection(int id)
+void delete_collection()
 {
+
+	char id_buf[LINELEN];
+	printf("id=");
+	fgets(id_buf, LINELEN, stdin);
+	id_buf[strlen(id_buf) - 1] = '\0';
+	int id = atoi(id_buf);
 
 	char url[LINELEN];
 	sprintf(url, "/api/v1/tema/library/collections/%d", id);
@@ -789,8 +918,19 @@ void delete_collection(int id)
 	}
 }
 
-void delete_movie_from_collection(int id_collection, int id_movie)
+void delete_movie_from_collection()
 {
+
+	char id_m[LINELEN], id_c[LINELEN];
+	int id_movie, id_collection;
+	printf("collection_id=");
+	fgets(id_c, LINELEN, stdin);
+	id_c[strlen(id_c) - 1] = '\0';
+	printf("movie_id=");
+	fgets(id_m, LINELEN, stdin);
+	id_m[strlen(id_m) - 1] = '\0';
+	id_movie = atoi(id_m);
+	id_collection = atoi(id_c);
 
 	char url[LINELEN];
 	sprintf(url, "/api/v1/tema/library/collections/%d/movies/%d", id_collection, id_movie);
@@ -807,12 +947,8 @@ void delete_movie_from_collection(int id_collection, int id_movie)
 
 }
 
-int main(int argc, char *argv[])
+int main()
 {
-
-	char *message;
-	char *response;
-	int sockfd = connect_to_server();
 
 	cookies = calloc(LINELEN, sizeof(char *));
 	for (int i = 0; i < LINELEN; i++) {
@@ -828,68 +964,24 @@ int main(int argc, char *argv[])
 		char line[LINELEN];
 		memset(line, 0, LINELEN);
 		fgets(line, LINELEN, stdin);
-		size_t length = strlen(line);
-		if (length > 0 && line[length - 1] == '\n') {
-			line[length - 1] = '\0';
-		}
+		line[strlen(line) - 1] = '\0';
 		if (strcmp(line, "login_admin") == 0) {
-
-			char username[LINELEN], password[LINELEN];
-			printf("username=");
-			fgets(username, LINELEN, stdin);
-			size_t len = strlen(username);
-			if (len > 0 && username[len - 1] == '\n') {
-				username[len - 1] = '\0';
-			}
-			printf("password=");
-			fgets(password, LINELEN, stdin);
-			len = strlen(password);
-			if (len > 0 && password[len - 1] == '\n') {
-				password[len - 1] = '\0';
-			}
-			login_admin(username, password);
+			login_admin();
 
 		} else if (strcmp(line, "login") == 0) {
 
-			char admin_username[LINELEN], username[LINELEN], password[LINELEN];
-			printf("admin_username=");
-			fgets(admin_username, LINELEN, stdin);
-			admin_username[strlen(admin_username) - 1] = '\0';
-			printf("username=");
-			fgets(username, LINELEN, stdin);
-			username[strlen(username) - 1] = '\0';
-			printf("password=");
-			fgets(password, LINELEN, stdin);
-			password[strlen(password) - 1] = '\0';
-			login_request(admin_username, username, password);
+			login_request();
 
 		} else if (strcmp(line, "add_user") == 0) {
 
-			char username[LINELEN], password[LINELEN];
-			printf("username=");
-			fgets(username, LINELEN, stdin);
-			size_t len = strlen(username);
-			if (len > 0 && username[len - 1] == '\n') {
-				username[len - 1] = '\0';
-			}
-			printf("password=");
-			fgets(password, LINELEN, stdin);
-			len = strlen(password);
-			if (len > 0 && password[len - 1] == '\n') {
-				password[len - 1] = '\0';
-			}
-			add_user(username, password);
+			add_user();
 
 		} else if (strcmp(line, "get_users") == 0) {
 			get_users();
 
 		} else if (strcmp(line, "delete_user") == 0) {
 
-			char username[LINELEN];
-			printf("username=");
-			fgets(username, LINELEN, stdin);
-			username[strlen(username) - 1] = '\0';
-			delete_user(username);
+			delete_user();
 
 		} else if (strcmp(line, "logout_admin") == 0) {
 			logout_admin();
@@ -905,145 +997,43 @@ int main(int argc, char *argv[])
 
 		} else if (strcmp(line, "add_movie") == 0) {
 
-			char title[LINELEN], year[LINELEN], description[LINELEN], rating[LINELEN];
-			double year_double, rating_double;
-			printf("title=");
-			fgets(title, LINELEN, stdin);
-			title[strlen(title) - 1] = '\0';
-			printf("year=");
-			fgets(year, LINELEN, stdin);
-			year[strlen(year) - 1] = '\0';
-			printf("description=");
-			fgets(description, LINELEN, stdin);
-			description[strlen(description) - 1] = '\0';
-			printf("rating=");
-			fgets(rating, LINELEN, stdin);
-			rating[strlen(rating) - 1] = '\0';
-			char *p, *p1;
-			year_double = strtod(year, &p);
-			rating_double = strtod(rating, &p1);
-			add_movie(title, year_double, description, rating_double);
+			add_movie();
 
 		} else if (strcmp(line, "get_movie") == 0) {
 
-			char id[LINELEN];
-			double id_movie;
-			printf("id=");
-			fgets(id, LINELEN, stdin);
-			id[strlen(id) - 1] = '\0';
-			char *p;
-			id_movie = strtod(id, &p);
-			get_movie(id_movie);
+			get_movie();
 
 		} else if (strcmp(line, "update_movie") == 0) {
 
-			char id[LINELEN], title[LINELEN], year[LINELEN], description[LINELEN], rating[LINELEN];
-			double year_double, rating_double, id_movie;
-			printf("id=");
-			fgets(id, LINELEN, stdin);
-			id[strlen(id) - 1] = '\0';
-			char *p2;
-			id_movie = strtod(id, &p2);
-			printf("title=");
-			fgets(title, LINELEN, stdin);
-			title[strlen(title) - 1] = '\0';
-			printf("year=");
-			fgets(year, LINELEN, stdin);
-			year[strlen(year) - 1] = '\0';
-			printf("description=");
-			fgets(description, LINELEN, stdin);
-			description[strlen(description) - 1] = '\0';
-			printf("rating=");
-			fgets(rating, LINELEN, stdin);
-			rating[strlen(rating) - 1] = '\0';
-			char *p, *p1;
-			year_double = strtod(year, &p);
-			rating_double = strtod(rating, &p1);
-			update_movie(id_movie, title, year_double, description, rating_double);
+			update_movie();
 
 		} else if (strcmp(line, "delete_movie") == 0) {
 
-			char id[LINELEN];
-			double id_movie;
-			printf("id=");
-			fgets(id, LINELEN, stdin);
-			id[strlen(id) - 1] = '\0';
-			char *p;
-			id_movie = strtod(id, &p);
-			delete_movie(id_movie);
+			delete_movie();
 
 		} else if (strcmp(line, "add_collection") == 0) {
 
-			char title[LINELEN], num_movies_str[LINELEN];
-			int movies[MAX_MOVIES], num_movies;
-			printf("title=");
-			fgets(title, LINELEN, stdin);
-			title[strlen(title) - 1] = '\0';
-			printf("num_movies=");
-			fgets(num_movies_str, LINELEN, stdin);
-			num_movies_str[strlen(num_movies_str) - 1] = '\0';
-			num_movies = atoi(num_movies_str);
-
-			for (int i = 0; i < num_movies; i++) {
-				printf("movie_id[%d]=", i);
-				char current[LINELEN];
-				fgets(current, LINELEN, stdin);
-				current[strlen(current) - 1] = '\0';
-				movies[i] = atoi(current);
-			}
-
-			add_collection(title, movies, num_movies);
-
+			add_collection();
 
 		} else if (strcmp(line, "get_collection") == 0) {
 
-			char id[LINELEN];
-			int id_collection;
-			printf("id=");
-			fgets(id, LINELEN, stdin);
-			id_collection = atoi(id);
-			get_collection(id_collection);
+			get_collection();
 
 		} else if (strcmp(line, "get_collections") == 0) {
 			get_collections();
 
 		} else if (strcmp(line, "add_movie_to_collection") == 0) {
 
-			char id_m[LINELEN], id_c[LINELEN];
-			int id_movie, id_collection;
-			printf("collection_id=");
-			fgets(id_c, LINELEN, stdin);
-			id_c[strlen(id_c) - 1] = '\0';
-			printf("movie_id=");
-			fgets(id_m, LINELEN, stdin);
-			id_m[strlen(id_m) - 1] = '\0';
-			id_movie = atoi(id_m);
-			id_collection = atoi(id_c);
-			add_movie_to_collection(id_collection, id_movie);
+			add_movie_to_collection();
 
 		} else if (strcmp(line, "delete_collection") == 0) {
 
-			char id_buf[LINELEN];
-			printf("id=");
-			fgets(id_buf, LINELEN, stdin);
-			id_buf[strlen(id_buf) - 1] = '\0';
-			int collection_id = atoi(id_buf);
-			delete_collection(collection_id);
+			delete_collection();
 		}
 
 		else if (strcmp(line, "delete_movie_from_collection") == 0) {
 
-			char id_m[LINELEN], id_c[LINELEN];
-			int id_movie, id_collection;
-			printf("collection_id=");
-			fgets(id_c, LINELEN, stdin);
-			id_c[strlen(id_c) - 1] = '\0';
-			printf("movie_id=");
-			fgets(id_m, LINELEN, stdin);
-			id_m[strlen(id_m) - 1] = '\0';
-			id_movie = atoi(id_m);
-			id_collection = atoi(id_c);
-			delete_movie_from_collection(id_collection, id_movie);
+			delete_movie_from_collection();
 
 		} else if (strcmp(line, "exit") == 0) {
 			break;
