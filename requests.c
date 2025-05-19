@@ -99,7 +99,6 @@ char *compute_post_request(char *host, char *url, char *content_type, char **bod
 	// Step 4 (optional): add cookies
 	if (cookies != NULL) {
 		for (int i = 0; i < cookies_count; i++) {
-			printf("Cookies[i] %s\n", cookies[i]);
 			sprintf(line, "Cookie: %s", cookies[i]);
 			compute_message(message, line);
 		}
@@ -169,7 +168,6 @@ char *compute_put_request(char *host, char *url, char *content_type, char **body
 	// Step 4 (optional): add cookies
 	if (cookies != NULL) {
 		for (int i = 0; i < cookies_count; i++) {
-			printf("Cookies[i] %s\n", cookies[i]);
 			sprintf(line, "Cookie: %s", cookies[i]);
 			compute_message(message, line);
 		}
@@ -190,7 +188,7 @@ char *compute_put_request(char *host, char *url, char *content_type, char **body
 }
 
 char *compute_delete_request(char *host, char *url, char **cookies, int cookies_count,
-							char **token, int token_count)
+	char **token, int token_count)
 {
 	char *message = calloc(BUFLEN, sizeof(char));
 	char *line = calloc(LINELEN, sizeof(char));
@@ -215,7 +213,6 @@ char *compute_delete_request(char *host, char *url, char **cookies, int cookies_
 	// Step 4 (optional): add cookies
 	if (cookies != NULL) {
 		for (int i = 0; i < cookies_count; i++) {
-			printf("Cookies[i] %s\n", cookies[i]);
 			sprintf(line, "Cookie: %s", cookies[i]);
 			compute_message(message, line);
 		}
